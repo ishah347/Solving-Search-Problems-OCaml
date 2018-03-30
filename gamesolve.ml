@@ -40,7 +40,8 @@ module type GAMESOLVER =
     val print_state: state -> unit
   end
 
-(* MakeGameSolver -- a higher-order functor that generates game solvers, with type
+(* MakeGameSolver -- a higher-order functor that generates game solvers, 
+   with type
  
   (functor(sig type t end -> COLLECTION)) -> GAMEDESCRIPTION -> GAMESOLVER
 
