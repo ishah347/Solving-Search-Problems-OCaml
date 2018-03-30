@@ -74,7 +74,7 @@ module TestTileGame(T : TILEINFO) =
 
       Printf.printf("Faster BFS time:\n");
       let (fbfs_path, _) = call_reporting_time FastBFSG.solve ()  in
-      (* For breadth first search, you should also check the length *)
+      (* For breadth first search, check the length *)
       flush stdout;
       assert (G.is_goal (G.execute_moves bfs_path));
       assert (G.is_goal (G.execute_moves fbfs_path));
@@ -222,10 +222,10 @@ module TestMazeGame(M : MAZEINFO) =
   end ;;
   
 (* Run the testing for each of our test mazes *)
-module MI   = TestMazeGame(TestMazeI)
-module MI'   = TestMazeGame(TestMazeI')
-module MII  = TestMazeGame(TestMazeII)
-module MII'  = TestMazeGame(TestMazeII')
+module MI = TestMazeGame(TestMazeI)
+module MI' = TestMazeGame(TestMazeI')
+module MII = TestMazeGame(TestMazeII)
+module MII' = TestMazeGame(TestMazeII')
 module MIII = TestMazeGame(TestMazeIII)
 module MIII' = TestMazeGame(TestMazeIII')
 

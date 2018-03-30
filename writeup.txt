@@ -18,7 +18,7 @@ Search", implemented using the MakeQueueStack functor, was only apparent as the 
 
 fact, while testing the performance of the two implementations in solving a basic 2 by 2 tile game and finding the way out of a 5 by 5 maze, the 
 
-seemingly less effcient Regular BFS outperformed the "Faster" BFS across the board. The reason for this occurrence likely lies in the differences in
+seemingly less efficient Regular BFS outperformed the "Faster" BFS across the board. The reason for this occurrence likely lies in the differences in
 
 the code used to put the searches in place. While in the MakeQueueList functor, elements are appended onto the back of the
 
@@ -38,31 +38,34 @@ and taking from collection, is shorter using regular BFS, as the length of the q
 
 less than the runtime for taking in the faster BFS. However, as the games become larger, as is seen in the 3 by 3 tile games and 15 by 15 maze games, 
 
-the Faster BFS truly becomes faster.
+the Faster BFS truly becomes faster. Overall, all disparities between the three search implementations got more and more obvious as the testing got 
 
-	It should be noted that for my test of the tiles games, DFS wasn't tested due to its runtime for solving 3 by 3 tile games being so long as to make
+more and more complex, displaying which one was truly most optimal for each game type.
 
-it impractical to test it once, much less multiple times. This shines light on the fact that DFS is overall inferior to BFS when it comes to solving 
+	It should be noted that for my test of the tiles games, DFS wasn't tested due to its runtime for solving 3 by 3 tile games being so long as to
 
-tiles games. This can likely be chalked up to the fact that there are far too many "paths" in solving a tile game, as there are very many combinations
+make it impractical to test it once, much less multiple times. This shines light on the fact that DFS is overall inferior to BFS when it comes to 
 
-of moves possible at any given time, to make testing paths one at a time efficient. BFS tries each path equally, making it far more easy and quick to 
+solving tiles games. This can likely be chalked up to the fact that there are far too many "paths" in solving a tile game, as there are very many 
 
-find a goal state. Meanwhile, while testing maze games, DFS was more efficient as the far smaller amount of paths made it preferable to BFS, whose
+combinations of moves possible at any given time, to make testing paths one at a time efficient. BFS tries each path equally, making it far more easy 
 
-testing of each path becomes extraneous in this instance. Only one exception to this general observation can be found, and that's in the solving of the
+and quick to find a goal state. Meanwhile, while testing maze games, DFS was more efficient as the far smaller amount of paths made it preferable to 
 
-5 by 5 maze in the normal direction. This is likely due to there being so few paths in this small maze that the normal disadvantage BFS faces in 
+BFS, whose testing of each path becomes extraneous in this instance. Only one exception to this general observation can be found, and that's in the 
 
-solving maze games is minimized in this instance.   
+solving of the 5 by 5 maze in the normal direction. This is likely due to there being so few paths in this small maze that the normal disadvantage BFS 
+
+faces in solving maze games is minimized in this instance.   
 
 
 
 				Test Performance of Tiles Game
-Dimensions of Tile Game,				Regular BFS Time (msecs)       Faster BFS Time (msecs)
+
+Dimensions of Tile Game,		Regular BFS Time (msecs)       Faster BFS Time (msecs)
 Number of Initial Moves Performed
 
-2 x 2, 15								ATTEMPT 1: 0.300169            ATTEMPT 1: 0.442028
+2 x 2, 15				ATTEMPT 1: 0.300169            ATTEMPT 1: 0.442028
                                         ATTEMPT 2: 0.277996            ATTEMPT 2: 0.491142
                                         ATTEMPT 3: 0.315905            ATTEMPT 3:  0.560045
                                         ATTEMPT 4: 0.319958            ATTEMPT 4: 0.543118
@@ -105,10 +108,11 @@ Number of Initial Moves Performed
 
 
 						Test Performance of Mazes Game
-Dimensions of Maze Game,				Regular BFS Time (msecs)       Faster BFS Time (msecs)     DFS Time (msecs)
+
+Dimensions of Maze Game,		Regular BFS Time (msecs)       Faster BFS Time (msecs)     DFS Time (msecs)
 Orientation
 
-5 x 5, Forward							ATTEMPT 1: 0.120163            ATTEMPT 1: 0.142097         ATTEMPT 1: 0.325918
+5 x 5, Forward				ATTEMPT 1: 0.120163            ATTEMPT 1: 0.142097         ATTEMPT 1: 0.325918
                                         ATTEMPT 2: 0.073195           ATTEMPT 2: 0.079141         ATTEMPT 2: 0.233889
                                         ATTEMPT 3: 0.123978           ATTEMPT 3:  0.106096        ATTEMPT 3: 0.239134 
                                         ATTEMPT 4: 0.084162            ATTEMPT 4: 0.095102         ATTEMPT 4: 0.245094
@@ -146,6 +150,6 @@ Orientation
 15 x 15, Reverse                        ATTEMPT 1: 1.456976          ATTEMPT 1: 1.328945       ATTEMPT 1: 1.183033
                                         ATTEMPT 2: 1.484156          ATTEMPT 2: 1.609087       ATTEMPT 2: 1.338959 
                                         ATTEMPT 3: 1.441956          ATTEMPT 3: 1.328945       ATTEMPT 3: 1.198053
-                                        ATTEMPT 4: 2.384901        ATTEMPT 4: 2.196074       ATTEMPT 4: 1.142025
+                                        ATTEMPT 4: 2.384901         ATTEMPT 4: 2.196074       ATTEMPT 4: 1.142025
                                         ATTEMPT 5: 1.490116          ATTEMPT 5: 1.348019       ATTEMPT 5: 1.186132 
 

@@ -68,6 +68,8 @@ module MakeGameSolver (DSFunc : functor(Element : sig type t end) ->
           let compare = G.compare_states
         end in
       let module SolveSet = Make(SolveSetArg) in
+      (* Initialize the pending collection as only containing the initial
+         state and the visited set as being empty *)
       let pending = SolveColl.add (G.initial_state, []) SolveColl.empty in
       let visited = SolveSet.empty in
       let rec gamesolver (p : SolveColl.collection) 

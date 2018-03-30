@@ -276,13 +276,17 @@ let test_solve () =
       let goal_pos = (2, 2)
       let dims = (3, 3)
     end in
-    let module MGame = MakeMazeGameDescription(M) in
-    let module DFSG = DFSSolver(MGame) in  
-    let module BFSG = BFSSolver(MGame) in
-    assert (DFSG.solve () = ([Left; Down; Down; Left],
-                               [(2, 2);(2, 0);(2, 1);(1, 1);(0, 1);(0, 0)]));
-    assert (BFSG.solve () = ([Left; Down; Down; Left], 
-                               [(2, 2); (2, 1); (1, 1); (0, 1); (0, 0)]));
+  let module MGame = MakeMazeGameDescription(M) in
+  let module DFSG = DFSSolver(MGame) in  
+  let module BFSG = BFSSolver(MGame) in
+  assert (DFSG.solve () = ([Left; Down; Down; Left],
+                              [(2, 2);(2, 0);(2, 1);(1, 1);(0, 1);(0, 0)]));
+  assert (BFSG.solve () = ([Left; Down; Down; Left], 
+                              [(2, 2);(2, 1);(1, 1);(0, 1);(0, 0)]));
+  let x, _ = DFSG.solve () in
+  assert (MGame.is_goal (MGame.execute_moves x));
+  let x, _ = BFSG.solve () in
+  assert (MGame.is_goal (MGame.execute_moves x));
   let init_maze = [|
       [| EmptySpace; Wall; Wall|];
       [| Wall; Wall; Wall|];
@@ -295,14 +299,14 @@ let test_solve () =
       let goal_pos = (2, 2)
       let dims = (3, 3)
     end in
-    let module MGame = MakeMazeGameDescription(M) in
-    let module DFSG = DFSSolver(MGame) in  
-    let error =
-      try
-        Some (DFSG.solve ())
-      with
-        DFSG.CantReachGoal -> None in
-    assert (error = None) 
+  let module MGame = MakeMazeGameDescription(M) in
+  let module DFSG = DFSSolver(MGame) in  
+  let error =
+    try
+      Some (DFSG.solve ())
+    with
+      DFSG.CantReachGoal -> None in
+  assert (error = None) 
 
 let _ =
   MI.run_tests();
