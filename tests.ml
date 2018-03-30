@@ -86,7 +86,7 @@ let test_tile_game () : unit =
   assert (G.is_goal (G.execute_moves bfs_path));
 
   Printf.printf("Faster BFS time:\n");
-  let (fbfs_path, bfs_expanded) = call_reporting_time FastBFSG.solve ()  in
+  let (fbfs_path, bfs_expanded) = call_reporting_time FastBFSG.solve () in
   (* For breadth first search, you should also check the length *)
   flush stdout;
   assert (G.is_goal (G.execute_moves bfs_path));
@@ -138,7 +138,7 @@ let square_maze (ct : int) : maze =
          Array.blit init_maze.((crow + 1) mod 5) 0 new_maze.(crow + 1) ccol 5;
          Array.blit init_maze.((crow + 2) mod 5) 0 new_maze.(crow + 2) ccol 5;
          Array.blit init_maze.((crow + 3) mod 5) 0 new_maze.(crow + 3) ccol 5;
-         Array.blit init_maze.((crow + 4)mod 5) 0 new_maze.(crow + 4) ccol 5;) 
+         Array.blit init_maze.((crow + 4)mod 5) 0 new_maze.(crow + 4) ccol 5;)
       in
       (* Keep on recursing *)
       copy_maze (crow) (ccol + 5) in
@@ -279,8 +279,10 @@ let test_solve () =
     let module MGame = MakeMazeGameDescription(M) in
     let module DFSG = DFSSolver(MGame) in  
     let module BFSG = BFSSolver(MGame) in
-    assert (DFSG.solve () = ([Left; Down; Down; Left], [(2, 2); (2, 0); (2, 1); (1, 1); (0, 1); (0, 0)]));
-    assert (BFSG.solve () = ([Left; Down; Down; Left], [(2, 2); (2, 1); (1, 1); (0, 1); (0, 0)]));
+    assert (DFSG.solve () = ([Left; Down; Down; Left],
+                               [(2, 2);(2, 0);(2, 1);(1, 1);(0, 1);(0, 0)]));
+    assert (BFSG.solve () = ([Left; Down; Down; Left], 
+                               [(2, 2); (2, 1); (1, 1); (0, 1); (0, 0)]));
   let init_maze = [|
       [| EmptySpace; Wall; Wall|];
       [| Wall; Wall; Wall|];
