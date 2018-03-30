@@ -20,9 +20,9 @@ fact, while testing the performance of the two implementations in solving a basi
 
 seemingly less effcient Regular BFS outperformed the "Faster" BFS across the board. The reason for this occurrence likely lies in the differences in
 
-the code used to put the searches in place. While in the MakeQueueList functor, elements are concatenated onto the back of the
+the code used to put the searches in place. While in the MakeQueueList functor, elements are appended onto the back of the
 
-queue using "@", which has a runtime of O(n), as its performance grows linearly as the size of the queue being concatenated onto
+queue using "@", which has a runtime of O(n), as its performance grows linearly as the size of the queue being appended onto
 
 grows. Meanwhile, in the MakeQueueStack functor, elements are "cons"ed onto the front of the second stack of the queue, which means that its add 
 

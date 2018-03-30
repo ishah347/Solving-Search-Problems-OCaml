@@ -69,7 +69,10 @@ module MakeGameSolver (DSFunc : functor(Element : sig type t end) ->
       let module SolveSet = Make(SolveSetArg) in
       let pending = SolveColl.add (G.initial_state, []) SolveColl.empty in
       let visited = SolveSet.empty in
-      let rec gamesolver (p : SolveColl.collection) (v : SolveSet.t) (expanded : state list) : move list * state list = 
+      let rec gamesolver (p : SolveColl.collection) 
+                         (v : SolveSet.t) 
+                         (expanded : state list) 
+                       : move list * state list = 
         if p <> SolveColl.empty then
           let (current_state, mlst), coll = SolveColl.take p in   
           if SolveSet.mem current_state v then 
@@ -79,9 +82,11 @@ module MakeGameSolver (DSFunc : functor(Element : sig type t end) ->
             else   
               let new_v = SolveSet.add current_state v in
               let new_e = current_state :: expanded in
-              let nbor_states = 
-                List.map (fun (s, m) -> s, mlst @ [m]) (G.neighbors current_state) in
-              let new_p = List.fold_left (fun x y -> SolveColl.add y x) coll nbor_states in
+              let nbors = 
+                List.map (fun (s, m) -> 
+                            s, mlst @ [m]) (G.neighbors current_state) in
+              let new_p = 
+                List.fold_left (fun x y -> SolveColl.add y x) coll nbors in
               gamesolver new_p new_v new_e
         else raise CantReachGoal in
         gamesolver pending visited []    

@@ -139,7 +139,7 @@ module MakeQueueStack (Element : sig type t end)
                   
     let add (e : elt) (s1, s2 : collection) : collection = 
       s1, Stack.add e s2;;
-      
+    
     let rec take (s1, s2 : collection) :  elt * collection = 
       let rec reverse (s2', s1') = 
         if not (Stack.is_empty s2') then 
@@ -150,7 +150,6 @@ module MakeQueueStack (Element : sig type t end)
           let x1, y1 = Stack.take s1 in x1, (y1, s2)
         else take (reverse (s2, s1))
       else raise Empty   
-
   end  
 
 let minutes_spent_collections () : int = 60 ;;

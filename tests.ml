@@ -215,7 +215,96 @@ module MI   = TestMazeGame(TestMazeI)
 module MII  = TestMazeGame(TestMazeII)
 module MIII = TestMazeGame(TestMazeIII)
 
+(* A test for MakeQueueStack *)
+let test_MakeQueueStack () =
+  let module IntMQS = MakeQueueStack(struct type t = int end) in
+  let c = IntMQS.empty in
+  assert (IntMQS.is_empty c);
+  let x = Random.int 1000 in
+  let y = Random.int 1000 in
+  let z = Random.int 1000 in
+  let c = IntMQS.add x c in
+  let l = IntMQS.length c in 
+  assert (l = 1);
+  assert (not (IntMQS.is_empty c));
+  let c = IntMQS.add y c in 
+  let l = IntMQS.length c in 
+  assert (l = 2);
+  let c = IntMQS.add z c in 
+  let l = IntMQS.length c in 
+  assert (l = 3);
+  let n, c = IntMQS.take c in 
+  assert (n = x);
+  let l = IntMQS.length c in 
+  assert (l = 2);
+  let c = IntMQS.add y (IntMQS.add z c) in 
+  let l = IntMQS.length c in 
+  assert (l = 4);
+  let n, c = IntMQS.take c in
+  assert (n = y); 
+  let l = IntMQS.length c in 
+  assert (l = 3);
+  let n, c = IntMQS.take c in
+  assert (n = z); 
+  let l = IntMQS.length c in 
+  assert (l = 2);
+  let n, c = IntMQS.take c in
+  assert (n = z); 
+  let l = IntMQS.length c in 
+  assert (l = 1);
+  let n, c = IntMQS.take c in
+  assert (n = y); 
+  assert (IntMQS.is_empty c);
+  let error =
+    try
+      Some (IntMQS.take c)
+    with
+      IntMQS.Empty -> None in
+  assert (error = None) 
+
+(* A test for solve *)
+let test_solve () =
+  let init_maze = [|
+      [| EmptySpace; EmptySpace; Wall|];
+      [| Wall; EmptySpace; Wall|];
+      [| EmptySpace; EmptySpace; EmptySpace|];
+     |] in
+  let module M : MAZEINFO = 
+    struct
+      let maze = init_maze
+      let initial_pos = (0,0)
+      let goal_pos = (2, 2)
+      let dims = (3, 3)
+    end in
+    let module MGame = MakeMazeGameDescription(M) in
+    let module DFSG = DFSSolver(MGame) in  
+    let module BFSG = BFSSolver(MGame) in
+    assert (DFSG.solve () = ([Left; Down; Down; Left], [(2, 2); (2, 0); (2, 1); (1, 1); (0, 1); (0, 0)]));
+    assert (BFSG.solve () = ([Left; Down; Down; Left], [(2, 2); (2, 1); (1, 1); (0, 1); (0, 0)]));
+  let init_maze = [|
+      [| EmptySpace; Wall; Wall|];
+      [| Wall; Wall; Wall|];
+      [| EmptySpace; EmptySpace; EmptySpace|];
+     |] in
+  let module M : MAZEINFO = 
+    struct
+      let maze = init_maze
+      let initial_pos = (0,0)
+      let goal_pos = (2, 2)
+      let dims = (3, 3)
+    end in
+    let module MGame = MakeMazeGameDescription(M) in
+    let module DFSG = DFSSolver(MGame) in  
+    let error =
+      try
+        Some (DFSG.solve ())
+      with
+        DFSG.CantReachGoal -> None in
+    assert (error = None) 
+
 let _ =
   MI.run_tests();
   MII.run_tests();
   MIII.run_tests();
+  test_MakeQueueStack();
+  test_solve();

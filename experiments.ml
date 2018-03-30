@@ -206,7 +206,7 @@ module TestMazeGame(M : MAZEINFO) =
       (* Solve the BFS maze with the efficient queue and make sure the
          path reaches the goal *)
       Printf.printf("Fast BFS time:\n");
-      let (fbfs_path, bfs_expanded) = call_reporting_time FastBFSG.solve ()  in
+      let (fbfs_path, bfs_expanded) = call_reporting_time FastBFSG.solve () in
       assert (MGame.is_goal (MGame.execute_moves fbfs_path));
       
       (* Assert the length of the fast BFS and regular BFS path are the
@@ -215,7 +215,7 @@ module TestMazeGame(M : MAZEINFO) =
       
       (* Solve the DFS maze and make sure the path reaches the goal *)
       Printf.printf("DFS time:\n");
-      let (dfs_path, dfs_expanded) = call_reporting_time DFSG.solve ()  in
+      let (dfs_path, dfs_expanded) = call_reporting_time DFSG.solve () in
       assert (MGame.is_goal (MGame.execute_moves dfs_path));
 
       Printf.printf("DONE TESTING MAZE GAME\n");  
