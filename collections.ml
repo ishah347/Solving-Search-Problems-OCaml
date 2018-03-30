@@ -131,7 +131,7 @@ module MakeQueueStack (Element : sig type t end)
 
     let empty : collection = Stack.empty, Stack.empty
 
-    let is_empty (coll : collection) : bool = coll = empty
+    let is_empty : collection -> bool = (=) empty
             
     let length (s1, s2 : collection) : int = 
       Stack.length s1 + Stack.length s2
