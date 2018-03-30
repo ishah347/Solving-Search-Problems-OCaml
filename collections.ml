@@ -78,7 +78,7 @@ module MakeStackList (Element : sig type t end)
       match d with 
       | hd :: tl -> (hd, tl)
       | _ -> raise Empty
-end
+  end
 
 (*......................................................................
   Queues implemented as lists 
@@ -120,9 +120,37 @@ module MakeQueueList (Element : sig type t end)
  *)
 
 module MakeQueueStack (Element : sig type t end) 
-       : (COLLECTION with type elt = Element.t) =
+       : (COLLECTION with type elt = MakeStackList(Element).elt) =
   struct
-    failwith "MakeQueueStack not implemented"
-  end
+    exception Empty
 
-let minutes_spent_collections () : int = failwith "not provided" ;;
+    module Stack = MakeStackList(Element)
+
+    type elt = Stack.elt
+    type collection = Stack.collection * Stack.collection
+
+    let empty : collection = Stack.empty, Stack.empty
+
+    let is_empty (coll : collection) : bool = 
+      coll = empty 
+            
+    let length (s1, s2 : collection) : int = 
+      Stack.length s1 + Stack.length s2
+                  
+    let add (e : elt) (s1, s2 : collection) : collection = 
+      s1, Stack.add e s2;;
+      
+    let rec take (s1, s2 : collection) :  elt * collection = 
+      let rec reverse (s2', s1') = 
+        if not (Stack.is_empty s2') then 
+          let x2, y2 = Stack.take s2' in reverse (add x2 (y2, s1'))
+        else s1', s2' in   
+      if not (is_empty (s1, s2)) then 
+        if not (Stack.is_empty s1) then 
+          let x1, y1 = Stack.take s1 in x1, (y1, s2)
+        else take (reverse (s2, s1))
+      else raise Empty   
+
+  end  
+
+let minutes_spent_collections () : int = 60 ;;

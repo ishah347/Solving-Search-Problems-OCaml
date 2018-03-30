@@ -55,7 +55,41 @@ module MakeGameSolver (DSFunc : functor(Element : sig type t end) ->
        : (GAMESOLVER with type state = G.state
                       and type move = G.move) =
   struct
-    failwith "MakeGameSolver not implemented"
+    exception CantReachGoal
+    type state = G.state
+    type move = G.move
+
+    let solve () : move list * state list =
+      let module SolveColl = DSFunc(struct type t = state * (move list) end) in
+      let module SolveSetArg =
+        struct
+          type t = state
+          let compare = G.compare_states
+        end in
+      let module SolveSet = Make(SolveSetArg) in
+      let pending = SolveColl.add (G.initial_state, []) SolveColl.empty in
+      let visited = SolveSet.empty in
+      let rec gamesolver (p : SolveColl.collection) (v : SolveSet.t) (expanded : state list) : move list * state list = 
+        if p <> SolveColl.empty then
+          let (current_state, mlst), coll = SolveColl.take p in   
+          if SolveSet.mem current_state v then 
+            gamesolver coll v expanded
+          else  
+            if G.is_goal current_state then mlst, (current_state :: expanded)
+            else   
+              let new_v = SolveSet.add current_state v in
+              let new_e = current_state :: expanded in
+              let nbor_states = 
+                List.map (fun (s, m) -> s, mlst @ [m]) (G.neighbors current_state) in
+              let new_p = List.fold_left (fun x y -> SolveColl.add y x) coll nbor_states in
+              gamesolver new_p new_v new_e
+        else raise CantReachGoal in
+        gamesolver pending visited []    
+    
+    let draw = G.draw
+
+    let print_state = G.print_state
+
   end ;;
      
 (* DFSSolver and BFSSolver: Higher-order Functors that take in a
@@ -76,4 +110,4 @@ responses and will use them to help guide us in creating future
 assignments.
 ......................................................................*)
 
-let minutes_spent_gamesolve () : int = failwith "not provided" ;;
+let minutes_spent_gamesolve () : int = 300 ;;

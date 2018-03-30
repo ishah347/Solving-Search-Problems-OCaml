@@ -1,0 +1,151 @@
+							Report on Performance of Search Implementations
+
+	My experiments tested the efficiency of the various search implementations in solving tile games and maze games. For my experiment using tile 
+
+games, I tested the Regular BFS and Faster BFS implementations five times against three 2 by 2 tileboards and three 3 by 3 tileboards, with one of each 
+
+having been randomized through 15 moves performed on the initial board, another randomized with 30, and the last with 45. For my experiment using maze 
+
+games, I tested all three implementations five times against a 5 by 5 maze, a 10 by 10 maze, and a 15 by 15 maze, with each being solved both forwards 
+
+and backwards. The results of my experiments can be found at the bottom of this text.     					
+
+	In my experiments testing the performance of the various search implementations, a general observation I made was that, when compared to the 
+
+performance of the "Regular Breadth-First Search", implemented using the MakeQueueList functor, the higher efficiency of the "Faster Breadth-First 
+
+Search", implemented using the MakeQueueStack functor, was only apparent as the job given to the search implementations got larger and more complex. In
+
+fact, while testing the performance of the two implementations in solving a basic 2 by 2 tile game and finding the way out of a 5 by 5 maze, the 
+
+seemingly less effcient Regular BFS outperformed the "Faster" BFS across the board. The reason for this occurrence likely lies in the differences in
+
+the code used to put the searches in place. While in the MakeQueueList functor, elements are concatenated onto the back of the
+
+queue using "@", which has a runtime of O(n), as its performance grows linearly as the size of the queue being concatenated onto
+
+grows. Meanwhile, in the MakeQueueStack functor, elements are "cons"ed onto the front of the second stack of the queue, which means that its add 
+
+function has a constant runtime not dependent on the size of the queue. However, while elements are taken in queues created using the MakeQueueList 
+
+functor with a function that has performance O(1), they are taken in the MakeQueueStack functor with a function that sometimes makes use of many O(1)
+
+functions, which can add up to increase the runtime, and whose overall performance varies between 0(1) and O(n) depending on the availability of 
+
+elements in the first stack of the queue. Due to this, the process of solving smaller games, which requires adding
+
+and taking from collection, is shorter using regular BFS, as the length of the queue is so short that the runtime of its adding is nearly O(1) and is
+
+less than the runtime for taking in the faster BFS. However, as the games become larger, as is seen in the 3 by 3 tile games and 15 by 15 maze games, 
+
+the Faster BFS truly becomes faster.
+
+	It should be noted that for my test of the tiles games, DFS wasn't tested due to its runtime for solving 3 by 3 tile games being so long as to make
+
+it impractical to test it once, much less multiple times. This shines light on the fact that DFS is overall inferior to BFS when it comes to solving 
+
+tiles games. This can likely be chalked up to the fact that there are far too many "paths" in solving a tile game, as there are very many combinations
+
+of moves possible at any given time, to make testing paths one at a time efficient. BFS tries each path equally, making it far more easy and quick to 
+
+find a goal state. Meanwhile, while testing maze games, DFS was more efficient as the far smaller amount of paths made it preferable to BFS, whose
+
+testing of each path becomes extraneous in this instance. Only one exception to this general observation can be found, and that's in the solving of the
+
+5 by 5 maze in the normal direction. This is likely due to there being so few paths in this small maze that the normal disadvantage BFS faces in 
+
+solving maze games is minimized in this instance.   
+
+
+
+				Test Performance of Tiles Game
+Dimensions of Tile Game,				Regular BFS Time (msecs)       Faster BFS Time (msecs)
+Number of Initial Moves Performed
+
+2 x 2, 15								ATTEMPT 1: 0.300169            ATTEMPT 1: 0.442028
+                                        ATTEMPT 2: 0.277996            ATTEMPT 2: 0.491142
+                                        ATTEMPT 3: 0.315905            ATTEMPT 3:  0.560045
+                                        ATTEMPT 4: 0.319958            ATTEMPT 4: 0.543118
+                                        ATTEMPT 5: 0.281096            ATTEMPT 5: 0.477076
+
+
+2 x 2, 30                               ATTEMPT 1: 0.219107            ATTEMPT 1: 0.239134
+                                        ATTEMPT 2:  0.227928           ATTEMPT 2: 0.313044
+                                        ATTEMPT 3: 0.288963            ATTEMPT 3:  0.257015
+                                        ATTEMPT 4: 0.259161            ATTEMPT 4: 0.438929
+                                        ATTEMPT 5: 0.256062            ATTEMPT 5: 0.326157
+
+
+2 x 2, 45                               ATTEMPT 1: 0.354052            ATTEMPT 1: 0.570059
+                                        ATTEMPT 2: 0.491858            ATTEMPT 2: 0.718117
+                                        ATTEMPT 3: 0.503063            ATTEMPT 3: 0.914097
+                                        ATTEMPT 4:  0.697136           ATTEMPT 4:  0.626802
+                                        ATTEMPT 5: 0.453949            ATTEMPT 5: 0.635147
+
+
+3 x 3, 15                               ATTEMPT 1: 16.715050           ATTEMPT 1: 13.735056
+                                        ATTEMPT 2: 17.658949           ATTEMPT 2: 10.806799
+                                        ATTEMPT 3: 21.914959           ATTEMPT 3: 12.339830
+                                        ATTEMPT 4: 20.604849           ATTEMPT 4: 12.852907
+                                        ATTEMPT 5: 17.602921           ATTEMPT 5: 11.456966
+
+
+3 x 3, 30                               ATTEMPT 1: 31.279087           ATTEMPT 1: 22.699118
+                                        ATTEMPT 2: 33.270836           ATTEMPT 2:  22.878885
+                                        ATTEMPT 3: 32.398939           ATTEMPT 3: 24.788141
+                                        ATTEMPT 4: 30.742168           ATTEMPT 4: 23.253918
+                                        ATTEMPT 5: 29.735088           ATTEMPT 5: 23.852825
+
+
+3 x 3, 45                               ATTEMPT 1: 421.549082          ATTEMPT 1: 150.984049
+                                        ATTEMPT 2: 379.248142          ATTEMPT 2: 119.663000
+                                        ATTEMPT 3: 387.239933          ATTEMPT 3: 130.765915
+                                        ATTEMPT 4: 352.280855          ATTEMPT 4: 129.918814
+                                        ATTEMPT 5: 345.301867          ATTEMPT 5: 124.284029
+
+
+						Test Performance of Mazes Game
+Dimensions of Maze Game,				Regular BFS Time (msecs)       Faster BFS Time (msecs)     DFS Time (msecs)
+Orientation
+
+5 x 5, Forward							ATTEMPT 1: 0.120163            ATTEMPT 1: 0.142097         ATTEMPT 1: 0.325918
+                                        ATTEMPT 2: 0.073195           ATTEMPT 2: 0.079141         ATTEMPT 2: 0.233889
+                                        ATTEMPT 3: 0.123978           ATTEMPT 3:  0.106096        ATTEMPT 3: 0.239134 
+                                        ATTEMPT 4: 0.084162            ATTEMPT 4: 0.095102         ATTEMPT 4: 0.245094
+                                        ATTEMPT 5: 0.149012            ATTEMPT 5: 0.186205         ATTEMPT 5: 0.349045
+
+
+5 x 5, Reverse                          ATTEMPT 1: 0.099182           ATTEMPT 1: 0.154018        ATTEMPT 1: 0.053883
+                                        ATTEMPT 2: 0.097990           ATTEMPT 2: 0.152826        ATTEMPT 2: 0.056028
+                                        ATTEMPT 3: 0.077009            ATTEMPT 3:  0.087976        ATTEMPT 3: 0.044823
+                                        ATTEMPT 4: 0.102997           ATTEMPT 4: 0.123978         ATTEMPT 4: 0.060081
+                                        ATTEMPT 5: 0.100136            ATTEMPT 5: 0.112057         ATTEMPT 5: 0.055075
+
+
+10 x 10, Forwards                       ATTEMPT 1: 0.576973           ATTEMPT 1: 0.643969         ATTEMPT 1: 0.397921
+                                        ATTEMPT 2: 0.401020           ATTEMPT 2: 0.355005         ATTEMPT 2: 0.336885 
+                                        ATTEMPT 3: 0.432014           ATTEMPT 3: 0.413895         ATTEMPT 3: 0.281096
+                                        ATTEMPT 4: 0.581980           ATTEMPT 4: 0.572986        ATTEMPT 4: 0.613213
+                                        ATTEMPT 5: 0.536203           ATTEMPT 5: 0.553131        ATTEMPT 5: 0.370026
+
+
+10 x 10, Reverse                        ATTEMPT 1: 0.511885           ATTEMPT 1: 0.521898        ATTEMPT 1: 0.370026 
+                                        ATTEMPT 2: 0.495911           ATTEMPT 2: 0.514030       ATTEMPT 2: 0.375032
+                                        ATTEMPT 3: 0.521183            ATTEMPT 3: 0.513077        ATTEMPT 3: 0.411987 
+                                        ATTEMPT 4: 0.852823           ATTEMPT 4: 0.904083        ATTEMPT 4:  0.707150
+                                        ATTEMPT 5: 0.509024            ATTEMPT 5: 0.523090        ATTEMPT 5: 0.417948
+
+
+15 x 15, Forwards                       ATTEMPT 1: 1.627922            ATTEMPT 1: 1.402855         ATTEMPT 1: 0.787973 
+                                        ATTEMPT 2: 1.492977           ATTEMPT 2: 1.296997         ATTEMPT 2: 0.784159
+                                        ATTEMPT 3: 1.471043            ATTEMPT 3: 1.418829        ATTEMPT 3: 0.787020
+                                        ATTEMPT 4: 2.494097           ATTEMPT 4: 2.458096        ATTEMPT 4: 1.376152
+                                        ATTEMPT 5: 2.036810            ATTEMPT 5: 1.446009       ATTEMPT 5: 0.802994
+
+
+15 x 15, Reverse                        ATTEMPT 1: 1.456976          ATTEMPT 1: 1.328945       ATTEMPT 1: 1.183033
+                                        ATTEMPT 2: 1.484156          ATTEMPT 2: 1.609087       ATTEMPT 2: 1.338959 
+                                        ATTEMPT 3: 1.441956          ATTEMPT 3: 1.328945       ATTEMPT 3: 1.198053
+                                        ATTEMPT 4: 2.384901        ATTEMPT 4: 2.196074       ATTEMPT 4: 1.142025
+                                        ATTEMPT 5: 1.490116          ATTEMPT 5: 1.348019       ATTEMPT 5: 1.186132 
+
